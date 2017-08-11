@@ -1,6 +1,6 @@
 const express = require('express');
-const {mongoose} = require('./../db/db');
-const {Category} = require('./../db/models/category');
+// const {mongoose} = require('./../db/db');
+// const {Category} = require('./../db/models/category');
 
 const app = express();
 
