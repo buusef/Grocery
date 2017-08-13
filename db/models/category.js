@@ -11,12 +11,10 @@ const CategorySchema = new mongoose.Schema(
         },
         items: [
             {
-                name: {
-                    type: String,
-                    required: true,
-                    minlength: 2,
-                    unique: true,
-                    trim: true
+                _itemID: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Item',
+                    required: true
                 },
                 active: {
                     type: Boolean,
