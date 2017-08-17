@@ -31,9 +31,9 @@ app.post('/newcategory', (req,res)=>{
 });
 
 app.post('/newitem', (req,res)=>{
-    let { name } = req.body;
+    let { name, addedToCat } = req.body;
     if(!name) res.status(400).send();
-    let item = new Item({name});
+    let item = new Item({name, addedToCat});
     item.save()
     .then(()=>{
         res.send(item);
@@ -56,7 +56,114 @@ app.get('/items', (req,res) => {
 });
 
 //update category/item
+app.patch('/category/:id', (req,res)=>{
+    let id = req.params.id;
+    let name = req.body.name;
+    if(!ObjectID.isValid(id)) return res.status(400).send();
 
+    Category.findOneAndUpdate(
+        {
+            _id: id
+        },
+        {
+            $set: 
+            {
+                name
+            }
+        },
+        {
+            new: true
+        }
+    )
+    .then((doc)=>{
+        if(!doc) return res.status(400).send();
+        res.send(doc);
+    })
+    .catch((e)=>{
+        res.status(400).send();
+    })
+});
+
+app.patch('/catItems/:catId', async (req,res)=>{
+    try {
+        let _id = req.params.catId;
+        let {_itemId, active, action} = req.body;
+
+        if(!ObjectID.isValid(_id) || !ObjectID.isValid(_itemId)) return res.status(400).send();
+        
+        switch(action) {
+            case 'add':
+                // await Category.update(
+                //     {
+                //         _id,
+                //         'items._itemId': { '$ne': _itemId }
+                //     },
+                //     {
+                //         $push: {
+                //             items: {
+                //                 _itemId
+                //             }
+                //         }
+                //     }
+                // );
+                await Category.addNewItem(_id, _itemId);
+                await Item.changeDetails(_itemId, undefined, true);
+                res.send();
+                break;
+            case 'remove':
+                await Category.update(
+                    {
+                        _id
+                    },
+                    {
+                        $pull: {
+                            items: {
+                                _itemId
+                            }
+                        }
+                    }
+                );
+                await Item.changeDetails(_itemId, undefined, false);
+                res.send();
+                break;
+            case 'changeActivity':
+                await Category.update(
+                    {
+                        _id: new ObjectID(_id),
+                        'items._itemId': new ObjectID(_itemId)
+                    },
+                    {
+                        $set: {
+                            'items.$.active': active
+                        }
+                    }
+                );
+                res.send();
+                break;
+            default:
+                res.status(400).send('default response');
+                break;
+        };
+    } catch(e) {
+        res.status(400).send('Something went wrong: ' + e);
+    }
+});
+
+app.patch('/item/:id', (req,res)=>{
+    let id = req.params.id;
+    let { name, addedToCat } = req.body;
+
+    if(!ObjectID.isValid(id)) return res.status(400).send('Either of three is wrong');
+    
+    Item.changeDetails(id, name, addedToCat)
+    .then((doc)=>{
+        if(!doc) return res.status(400).send('Apparently the id is not found');
+        res.send(doc);
+    })
+    .catch((e)=>{
+        res.status(400).send(e);
+    })
+});
 
 //delete category/item
 app.delete('/deletecategory/:id', (req,res)=>{

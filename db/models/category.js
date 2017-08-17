@@ -11,7 +11,7 @@ const CategorySchema = new mongoose.Schema(
         },
         items: [
             {
-                _itemID: {
+                _itemId: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'Item',
                     required: true
@@ -24,6 +24,32 @@ const CategorySchema = new mongoose.Schema(
         ]
     }
 );
+
+// var autoPopulateLead = function(next) {
+//     this.populate('lead');
+//     next();
+//   };
+  
+//   bandSchema.
+//     pre('findOne', autoPopulateLead).
+//     pre('find', autoPopulateLead);
+
+CategorySchema.statics.addNewItem = function(_id, _itemId) {
+    return this.update(
+        {
+            _id,
+            'items._itemId': { '$ne': _itemId }
+        },
+        {
+            $push: {
+                items: {
+                    _itemId
+                }
+            }
+        }
+    );
+};
+
 
 let Category = mongoose.model('categories', CategorySchema);
 

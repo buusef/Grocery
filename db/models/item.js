@@ -9,12 +9,28 @@ const ItemSchema = new mongoose.Schema(
             trim: true,
             unique: true
         },
-        _category: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Category'
-        }
+        addedToCat: Boolean
     }
 );
+
+ItemSchema.statics.changeDetails = function (id, name, addedToCat) {
+    let item = this;
+    let body = {};
+    if(name) body.name = name;
+    if(typeof addedToCat === 'boolean') body.addedToCat = addedToCat;
+
+    return item.findOneAndUpdate(
+        {
+            _id: id
+        },
+        {
+            $set: body
+        },
+        {
+            new: true
+        }
+    );
+};
 
 let Item = mongoose.model('items', ItemSchema);
 
