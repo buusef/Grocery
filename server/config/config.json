@@ -1,0 +1,12 @@
+{
+    "test": {
+        "PORT": 3000,
+        "MONGODB_URI":"mongodb://localhost:27017/GroceryTest",
+        "JWT_SECRET": "pDGsFSFef342FAc3cQEcqDdQDCQ@eQCDWQD@CEQQ232424"
+    },
+    "development": {
+        "PORT": 3000,
+        "MONGODB_URI":"mongodb://localhost:27017/Grocery",
+        "JWT_SECRET": "FJ3rk3jRJKra#%k&j@a3!RA!KJvka#kA3k34343"
+    }
+}

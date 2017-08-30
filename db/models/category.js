@@ -50,6 +50,34 @@ CategorySchema.statics.addNewItem = function(_id, _itemId) {
     );
 };
 
+CategorySchema.statics.removeItem = function(_id, _itemId) {
+    return this.update(
+        {
+            _id
+        },
+        {
+            $pull: {
+                items: {
+                    _itemId
+                }
+            }
+        }
+    );
+};
+
+CategorySchema.statics.changeActivity = function(_id, _itemId, active) {
+    return this.update(
+        {
+            _id: new ObjectID(_id),
+            'items._itemId': new ObjectID(_itemId)
+        },
+        {
+            $set: {
+                'items.$.active': active
+            }
+        }
+    );
+};
 
 let Category = mongoose.model('categories', CategorySchema);
 

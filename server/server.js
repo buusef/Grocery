@@ -1,3 +1,4 @@
+require('./config/config');
 const express = require('express');
 const path = require('path');
 const http = require('http');
@@ -111,33 +112,12 @@ app.patch('/catItems/:catId', async (req,res)=>{
                 res.send();
                 break;
             case 'remove':
-                await Category.update(
-                    {
-                        _id
-                    },
-                    {
-                        $pull: {
-                            items: {
-                                _itemId
-                            }
-                        }
-                    }
-                );
+                await Category.removeItem(_id, _itemId);
                 await Item.changeDetails(_itemId, undefined, false);
                 res.send();
                 break;
             case 'changeActivity':
-                await Category.update(
-                    {
-                        _id: new ObjectID(_id),
-                        'items._itemId': new ObjectID(_itemId)
-                    },
-                    {
-                        $set: {
-                            'items.$.active': active
-                        }
-                    }
-                );
+                await Category.changeActivity(_id, _itemId, active);
                 res.send();
                 break;
             default:
@@ -153,7 +133,7 @@ app.patch('/item/:id', (req,res)=>{
     let id = req.params.id;
     let { name, addedToCat } = req.body;
 
-    if(!ObjectID.isValid(id)) return res.status(400).send('Either of three is wrong');
+    if(!ObjectID.isValid(id)) return res.status(400).send();
     
     Item.changeDetails(id, name, addedToCat)
     .then((doc)=>{
@@ -203,3 +183,5 @@ app.delete('/deleteitem/:id', (req,res)=>{
 server.listen(port, ()=>{
     console.log(`Server is listening on ${port}`)
 });
+
+module.exports = {app};

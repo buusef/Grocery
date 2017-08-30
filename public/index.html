@@ -2,13 +2,50 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="./style.css">        
     </head>
     <body>
-        <div>
-            <ul>
-                <li>First</li>
-                <li>Second</li>
+        <nav></nav>
+        <header>
+            <h1>Grocery App</h1>
+        </header>
+        <div class="main">
+            <ul class="display-list">
+                <li class="listItem header">
+                    <h3>Fruits</h3>
+                </li>
+                <li class="listItem child">
+                    <span class="aaaaa">Bananas</span>
+                    <input type="text" value="Bananas">
+                    <button>Edit</button>
+                    <!-- <button onclick="editItem(this)">Edit</button> -->
+                </li>
+                <li class="listItem child">
+                    <span>Apples</span>
+                    <input type="text" value="Apples">
+                    <button>Edit</button>
+                </li>
+            </ul>
+            <ul class="display-list">
+                <li class="listItem header">
+                    <h3>Vegatables</h3>
+                </li>
+                <li class="listItem child">
+                    <span>Tomatos</span>
+                    <input type="text" value="Tomatos">
+                    <button>Edit</button>
+                </li>
+                <li class="listItem child">
+                    <span>Potatos</span>
+                    <input type="text" value="Potatos">
+                    <button>Edit</button>
+                </li>
             </ul>
         </div>
+        <footer>
+            <span>Last update: </span>
+        </footer>
+
+        <script src='js/index.js'></script>
     </body>
 </html>

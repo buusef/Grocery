@@ -1,0 +1,43 @@
+.display-list {
+    list-style-type:none;
+    border-left: 2px solid;
+    padding: 0;
+    margin: 20px;
+}
+
+.listItem.header {
+    padding-left: 10px;   
+}
+.listItem {
+    padding-left: 20px;
+}
+li input {
+    display: none;
+}
+
+li.edit input {
+    display: initial;
+}
+li.edit span {
+    display: none;
+}
+
+#editPage {
+    display: none;
+    position: fixed;
+    height: 20%;
+    width: 20%;
+    background-color: #ccc;
+    top: 20%;
+    left: 50%;
+}
+
+#editPage.pop {
+    display: block;
+}
+
+#close {
+    display: block;
+    text-align: right;
+
+}
